@@ -1,25 +1,37 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
 import './App.css';
+import NotiziaPrincipale from './components/notiziaPrincipale';
+import NotizieSecondarie from './components/notizieSecondarie';
+import Menu from './components/header';
+import Footer from './components/footer';
 
-class App extends Component {
+type Props = {
+  newsData: Array<any>
+}
+
+class App extends Component<Props> {
+  constructor(props) {
+    super(props)
+
+    this.state = {
+      SecondaryNews: []
+    }
+    this.notizie()
+  }
+
+  notizie = () => {
+    fetch("https://reqres.in/api/users")
+      .then(response => response.json())
+      .then(res => this.setState({ SecondaryNews: res.data }))
+  }
+
   render() {
     return (
-      <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <p>
-            Edit <code>src/App.js</code> and save to reload.
-          </p>
-          <a
-            className="App-link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn React
-          </a>
-        </header>
+      <div>
+        <Menu />
+        <NotiziaPrincipale />
+        <NotizieSecondarie newsData={this.state.SecondaryNews} />
+        <Footer />
       </div>
     );
   }
